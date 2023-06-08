@@ -1,0 +1,30 @@
+
+{
+    "sequences":[
+    {
+    "name":"sequence_zero",
+    "type":"permanent",
+    "pos":{"x":0, "y":0,"w":1080, "h":1920},
+    "names":[
+    "/home/skiafa/workspace/VideoManager/pictures/sleep_1.png",
+    "/home/skiafa/workspace/VideoManager/pictures/sleep_2.png",
+    "/home/skiafa/workspace/VideoManager/pictures/sleep_3.png",
+    "/home/skiafa/workspace/VideoManager/pictures/sleep_4.png",
+    "/home/skiafa/workspace/VideoManager/pictures/sleep_5.png"
+    ],
+    "last_one":"/home/skiafa/workspace/VideoManager/pictures/sleep_over.png"
+    },
+    {
+    "name":"sequence_one",
+    "type":"permanent",
+    "pos":{"x":0, "y":0,"w":1080, "h":1920},
+    "names":[
+    "/home/skiafa/workspace/VideoManager/pictures/sleep_1.png",
+    "/home/skiafa/workspace/VideoManager/pictures/sleep_2.png",
+    "/home/skiafa/workspace/VideoManager/pictures/sleep_3.png",
+    "/home/skiafa/workspace/VideoManager/pictures/sleep_4.png",
+    "/home/skiafa/workspace/VideoManager/pictures/sleep_5.png"
+    ],
+    "last_one":"/home/skiafa/workspace/VideoManager/pictures/sleep_over.png"
+    }]
+}
