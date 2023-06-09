@@ -19,13 +19,9 @@ int main(int argc, char** argv )
         return "Hello world!";
     });
 
-    app.port(18080).run();
+    
     P.Start();
     int count =0;
-    while(count < 100)
-    {
-        std::this_thread::sleep_for(std::chrono::milliseconds(500));
-        count+=1;
-    }
+    app.port(18080).run();
     return 0;
 }

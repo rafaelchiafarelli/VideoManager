@@ -39,42 +39,42 @@ void Player::work_func(int w, int h, int step){
     {   
         //the index of the image is the order on witch it is inserted
         cv::Mat screen_img(w,h,CV_8UC3, cv::Scalar(0,0,0) );        
-        for(auto &[key, value] : c.sequences)
+        for(auto &sequence: c.sequences)
         { 
             
-
-            if(value.type == permanent)
+            
+            if(sequence.second.type == permanent)
             {
-                if(value.cur_index >= value.images.size())
+                if(sequence.second.cur_index >= sequence.second.images.size())
                 {
-                    if(value.cur_repeat >= value.repeat)
+                    if(sequence.second.cur_repeat >= sequence.second.repeat)
                     {
-                        if(value.last_one.empty())
+                        if(sequence.second.last_one.empty())
                         {
-                            value.cur_index = 0;
-                            value.cur_repeat = 0;
+                            sequence.second.cur_index = 0;
+                            sequence.second.cur_repeat = 0;
                             
-                            glue(value.images[value.cur_index], screen_img, value.region);
+                            glue(sequence.second.images[sequence.second.cur_index], screen_img, sequence.second.region);
                         }
                         else
                         {
 
-                            glue(value.last_image,screen_img,value.region);
+                            glue(sequence.second.last_image,screen_img,sequence.second.region);
                         }
                     }
                     else
                     {
-                        value.cur_index = 0;
-                        value.cur_repeat += 1;
+                        sequence.second.cur_index = 0;
+                        sequence.second.cur_repeat += 1;
                         
-                        glue(value.images[value.cur_index], screen_img, value.region);
+                        glue(sequence.second.images[sequence.second.cur_index], screen_img, sequence.second.region);
                     }
                 }
                 else
                 {
                     
-                    glue(value.images[value.cur_index], screen_img, value.region);
-                    value.cur_index+=1;
+                    glue(sequence.second.images[sequence.second.cur_index], screen_img, sequence.second.region);
+                    sequence.second.cur_index+=1;
                 }                
             }
             else //if it is not permanent, it is ondemand
@@ -84,22 +84,22 @@ void Player::work_func(int w, int h, int step){
                 std::vector<std::string>::iterator it;
                 {
                     std::lock_guard<std::mutex> lock(mu);
-                    it = std::find(OnDemandListName.begin(), OnDemandListName.end(),key);
+                    it = std::find(OnDemandListName.begin(), OnDemandListName.end(),sequence.second.name);
                     go_for_it = (it != OnDemandListName.end());
                 }
                 
 
                 if(go_for_it)
                 {
-                    std::cout<<"ondemand :"<<value.name<<std::endl;
-                    if(value.cur_index >= value.images.size())
+                    std::cout<<"ondemand :"<<sequence.second.name<<std::endl;
+                    if(sequence.second.cur_index >= sequence.second.images.size())
                     {
-                        if(value.cur_repeat >= value.repeat)
+                        if(sequence.second.cur_repeat >= sequence.second.repeat)
                         {
-                            if(value.last_one.empty())
+                            if(sequence.second.last_one.empty())
                             {
-                                value.cur_index = 0;
-                                value.cur_repeat = 0;
+                                sequence.second.cur_index = 0;
+                                sequence.second.cur_repeat = 0;
                                 {
                                     std::lock_guard<std::mutex> lock(mu);
                                     OnDemandListName.erase(it);
@@ -108,20 +108,20 @@ void Player::work_func(int w, int h, int step){
                             else
                             {
                                 //just show the last one
-                                glue(value.last_image,screen_img,value.region);
+                                glue(sequence.second.last_image,screen_img,sequence.second.region);
                             }
                         }
                         else
                         {
-                            value.cur_index = 0;
-                            value.cur_repeat += 1;
-                            glue(value.images[value.cur_index], screen_img, value.region);
+                            sequence.second.cur_index = 0;
+                            sequence.second.cur_repeat += 1;
+                            glue(sequence.second.images[sequence.second.cur_index], screen_img, sequence.second.region);
                         }
                     }
                     else
                     {
-                        glue(value.images[value.cur_index], screen_img, value.region);
-                        value.cur_index+=1;
+                        glue(sequence.second.images[sequence.second.cur_index], screen_img, sequence.second.region);
+                        sequence.second.cur_index+=1;
                     }
                 }
                 //
@@ -139,23 +139,24 @@ Player::Player(std::string config_file)
     if(c.parser(config_file))
     {
         std::cout<<"configuration loaded -- loading images"<<std::endl;
-        for(auto &[key, value]: c.sequences)
+        for(auto &sequence: c.sequences)
         {
-            std::cout<<"name:"<<key<<std::endl;
-            if(value.names.size() != value.images.size())
+            
+            std::cout<<"name:"<<sequence.second.name<<std::endl;
+            if(sequence.second.names.size() != sequence.second.images.size())
             {
-                std::cout<<"error: wrong size names:"<<value.names.size()<<" images:"<<value.images.size()<<std::endl;
+                std::cout<<"error: wrong size names:"<<sequence.second.names.size()<<" images:"<<sequence.second.images.size()<<std::endl;
                 continue;
             }
-            for(unsigned i =0; i < value.names.size(); i++)
+            for(unsigned i =0; i < sequence.second.names.size(); i++)
             {
-                std::string f_name = value.names[i];
+                std::string f_name = sequence.second.names[i];
                 std::cout<<"name of current file:"<<f_name<<std::endl;
                 std::ifstream img_f(f_name);
                 if(img_f.good())
                 {
                     cv::Mat tmp =imread(f_name, cv::IMREAD_UNCHANGED);
-                    tmp.copyTo(value.images[i]);
+                    tmp.copyTo(sequence.second.images[i]);
                 }
                 else
                 {
@@ -163,14 +164,14 @@ Player::Player(std::string config_file)
                     continue;
                 }
             }
-            if(!value.last_one.empty())
+            if(!sequence.second.last_one.empty())
             {
-                std::cout<<"name of current file:"<<value.last_one<<std::endl;
-                std::ifstream img_f(value.last_one);
+                std::cout<<"name of current file:"<<sequence.second.last_one<<std::endl;
+                std::ifstream img_f(sequence.second.last_one);
                 if(img_f.good())
                 {
-                    cv::Mat tmp =imread(value.last_one, cv::IMREAD_UNCHANGED);
-                    tmp.copyTo(value.last_image);
+                    cv::Mat tmp =imread(sequence.second.last_one, cv::IMREAD_UNCHANGED);
+                    tmp.copyTo(sequence.second.last_image);
                 }
             }
         }
