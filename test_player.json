@@ -1,5 +1,10 @@
 
 {
+    "window":[1080,1920],
+    "window_number":1,
+    "step_ms":100,
+    "ondemand_max":5,
+    
     "sequences":[
     {
     "name":"Fundo",

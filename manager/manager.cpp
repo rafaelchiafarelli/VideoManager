@@ -12,7 +12,7 @@ int main(int argc, char** argv )
     
     Player P("./test_player.json");
 
-    P.Start(1080,1920);
+    P.Start();
     int count =0;
     while(count < 100)
     {

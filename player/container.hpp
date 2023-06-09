@@ -117,6 +117,20 @@ public:
 
     PlayImage() {};
 };
+class application
+{
+    public:
+        int window_x, window_y, window_number, step_ms, ondemand_max;
+        application():
+                window_number{0},
+                window_x{800},
+                window_y{600},
+                step_ms{100},
+                ondemand_max{5}
+        {
+
+        };
+};
 
 class container
 {
@@ -125,6 +139,6 @@ private:
     void glue(cv::Mat src, cv::Mat dst, cv::Rect region);
 public:
     std::map<std::string,PlayImage> sequences;
-    
+    application app;
     bool parser(std::string filename);
 };

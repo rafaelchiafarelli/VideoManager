@@ -11,12 +11,12 @@ void Player::OnDemand(std::string name)
     OnDemandListName.push_back(name);
 }
 
-void Player::Start(int width, int height)
+void Player::Start()
 {
 
     alive = true;
     
-    work = std::thread(&Player::work_func,this, width,height);
+    work = std::thread(&Player::work_func,this,c.app.window_x,c.app.window_y, c.app.step_ms);
 }
 
 void Player::Stop()
@@ -25,7 +25,7 @@ void Player::Stop()
     work.join();
 
 }
-void Player::work_func(int w, int h){
+void Player::work_func(int w, int h, int step){
     //create a black image of the desired size -- check size for OrangePi and RaspberryPi machines.
     
     //create a namedWindow
@@ -53,13 +53,12 @@ void Player::work_func(int w, int h){
                         {
                             value.cur_index = 0;
                             value.cur_repeat = 0;
-                            std::cout<<"back to zero:"<<value.name<<std::endl;
+                            
                             glue(value.images[value.cur_index], screen_img, value.region);
                         }
                         else
                         {
-                            //just show the last one
-                            std::cout<<"not empty :"<<value.name<<std::endl;
+
                             glue(value.last_image,screen_img,value.region);
                         }
                     }
@@ -67,13 +66,13 @@ void Player::work_func(int w, int h){
                     {
                         value.cur_index = 0;
                         value.cur_repeat += 1;
-                        std::cout<<"increase repeat :"<<value.name<<std::endl;
+                        
                         glue(value.images[value.cur_index], screen_img, value.region);
                     }
                 }
                 else
                 {
-                    std::cout<<"increase index :"<<value.name<<std::endl;
+                    
                     glue(value.images[value.cur_index], screen_img, value.region);
                     value.cur_index+=1;
                 }                
@@ -131,7 +130,7 @@ void Player::work_func(int w, int h){
         std::cout<<"Display image"<<std::endl;
         cv::imshow("Display",screen_img);
         //display the image mixed
-        cv::waitKey(500);
+        cv::waitKey(step);
     }
 }
 Player::Player(std::string config_file)

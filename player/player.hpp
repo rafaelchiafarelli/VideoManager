@@ -17,11 +17,11 @@ private:
     std::thread work;
     std::atomic_bool alive;
     void transparency(cv::Mat img);
-    void work_func(int,int);
+    void work_func(int,int,int);
     std::mutex mu;
 
 public:
-    void Start(int width, int heigh);
+    void Start();
     void Stop();
     void OnDemand(std::string name);
     Player(std::string config_file);

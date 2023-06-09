@@ -19,7 +19,41 @@ bool ret = false;
         {
             std::cerr << e.what() << '\n';
         }
-        
+
+        if(raw_data.contains("window"))
+        {
+            if(raw_data["window"].type() == json::value_t::array)
+            {
+                if(raw_data["window"].size() == 2)
+                {
+                    if(raw_data["window"][0].type() == json::value_t::number_unsigned)
+                        app.window_x = raw_data["window"][0];
+                    if(raw_data["window"][1].type() == json::value_t::number_unsigned)                        
+                        app.window_y = raw_data["window"][1];
+                }
+            }
+        }
+        if(raw_data.contains("window_number"))
+        {
+            if(raw_data["window_number"].type() == json::value_t::number_unsigned)
+                {
+                    app.window_number = raw_data["window_number"];
+                }
+        }
+        if(raw_data.contains("step_ms"))
+        {
+            if(raw_data["step_ms"].type() == json::value_t::number_unsigned)
+            {
+                app.step_ms = raw_data["step_ms"];
+            }
+        }
+        if(raw_data.contains("ondemand_max"))
+        {
+            if(raw_data["ondemand_max"].type() == json::value_t::number_unsigned)
+            {
+                app.ondemand_max = raw_data["ondemand_max"];
+            }
+        }
         if(raw_data.contains("sequences"))
         {
             if(raw_data["sequences"].type() == json::value_t::array)
