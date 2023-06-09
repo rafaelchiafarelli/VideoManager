@@ -9,5 +9,5 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 add_executable(VideoManager manager.cpp)
 
-target_link_libraries(VideoManager ${OpenCV_LIBS})
+target_link_libraries(VideoManager ${OpenCV_LIBS} player pthread)
 target_include_directories(VideoManager INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})

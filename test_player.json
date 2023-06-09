@@ -2,9 +2,11 @@
 {
     "sequences":[
     {
-    "name":"sequence_zero",
+    "name":"Fundo",
     "type":"permanent",
-    "pos":{"x":0, "y":0,"w":1080, "h":1920},
+    "order":"background",
+    "repeat":0,
+    "pos":{"x":0, "y":0,"w":800, "h":600},
     "names":[
     "/home/skiafa/workspace/VideoManager/pictures/sleep_1.png",
     "/home/skiafa/workspace/VideoManager/pictures/sleep_2.png",
@@ -15,9 +17,11 @@
     "last_one":"/home/skiafa/workspace/VideoManager/pictures/sleep_over.png"
     },
     {
-    "name":"sequence_one",
-    "type":"permanent",
-    "pos":{"x":0, "y":0,"w":1080, "h":1920},
+    "name":"Magistrado",
+    "type":"ondemand",
+    "order":"foreground",
+    "repeat":10,
+    "pos":{"x":0, "y":0,"w":800, "h":600},
     "names":[
     "/home/skiafa/workspace/VideoManager/pictures/sleep_1.png",
     "/home/skiafa/workspace/VideoManager/pictures/sleep_2.png",

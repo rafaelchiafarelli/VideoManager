@@ -11,12 +11,12 @@ void Player::OnDemand(std::string name)
     OnDemandListName.push_back(name);
 }
 
-void Player::Start()
+void Player::Start(int width, int height)
 {
 
     alive = true;
     
-    work = std::thread(&Player::work_func,this);
+    work = std::thread(&Player::work_func,this, width,height);
 }
 
 void Player::Stop()
@@ -25,11 +25,113 @@ void Player::Stop()
     work.join();
 
 }
-void Player::work_func(){
+void Player::work_func(int w, int h){
+    //create a black image of the desired size -- check size for OrangePi and RaspberryPi machines.
+    
+    //create a namedWindow
+    //move to the appropriate place
+    //set it as full screen
+    //cv::namedWindow("Display", cv::WINDOW_AUTOSIZE );
+    cv::namedWindow("Display", cv::WND_PROP_FULLSCREEN );
+    cv::moveWindow("Display", -1,-1);
+    cv::setWindowProperty ("Display", cv::WND_PROP_FULLSCREEN, cv::WINDOW_FULLSCREEN);
     while(alive)
-    {
+    {   
+        //the index of the image is the order on witch it is inserted
+        cv::Mat screen_img(w,h,CV_8UC3, cv::Scalar(0,0,0) );        
+        for(auto &[key, value] : c.sequences)
+        { 
+            
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            if(value.type == permanent)
+            {
+                if(value.cur_index >= value.images.size())
+                {
+                    if(value.cur_repeat >= value.repeat)
+                    {
+                        if(value.last_one.empty())
+                        {
+                            value.cur_index = 0;
+                            value.cur_repeat = 0;
+                            std::cout<<"back to zero:"<<value.name<<std::endl;
+                            glue(value.images[value.cur_index], screen_img, value.region);
+                        }
+                        else
+                        {
+                            //just show the last one
+                            std::cout<<"not empty :"<<value.name<<std::endl;
+                            glue(value.last_image,screen_img,value.region);
+                        }
+                    }
+                    else
+                    {
+                        value.cur_index = 0;
+                        value.cur_repeat += 1;
+                        std::cout<<"increase repeat :"<<value.name<<std::endl;
+                        glue(value.images[value.cur_index], screen_img, value.region);
+                    }
+                }
+                else
+                {
+                    std::cout<<"increase index :"<<value.name<<std::endl;
+                    glue(value.images[value.cur_index], screen_img, value.region);
+                    value.cur_index+=1;
+                }                
+            }
+            else //if it is not permanent, it is ondemand
+            {
+                //lock mutex 
+                bool go_for_it = false;
+                std::vector<std::string>::iterator it;
+                {
+                    std::lock_guard<std::mutex> lock(mu);
+                    it = std::find(OnDemandListName.begin(), OnDemandListName.end(),key);
+                    go_for_it = (it != OnDemandListName.end());
+                }
+                
+
+                if(go_for_it)
+                {
+                    std::cout<<"ondemand :"<<value.name<<std::endl;
+                    if(value.cur_index >= value.images.size())
+                    {
+                        if(value.cur_repeat >= value.repeat)
+                        {
+                            if(value.last_one.empty())
+                            {
+                                value.cur_index = 0;
+                                value.cur_repeat = 0;
+                                {
+                                    std::lock_guard<std::mutex> lock(mu);
+                                    OnDemandListName.erase(it);
+                                }
+                            }
+                            else
+                            {
+                                //just show the last one
+                                glue(value.last_image,screen_img,value.region);
+                            }
+                        }
+                        else
+                        {
+                            value.cur_index = 0;
+                            value.cur_repeat += 1;
+                            glue(value.images[value.cur_index], screen_img, value.region);
+                        }
+                    }
+                    else
+                    {
+                        glue(value.images[value.cur_index], screen_img, value.region);
+                        value.cur_index+=1;
+                    }
+                }
+                //
+            }
+        }
+        std::cout<<"Display image"<<std::endl;
+        cv::imshow("Display",screen_img);
+        //display the image mixed
+        cv::waitKey(500);
     }
 }
 Player::Player(std::string config_file)
@@ -62,6 +164,16 @@ Player::Player(std::string config_file)
                     continue;
                 }
             }
+            if(!value.last_one.empty())
+            {
+                std::cout<<"name of current file:"<<value.last_one<<std::endl;
+                std::ifstream img_f(value.last_one);
+                if(img_f.good())
+                {
+                    cv::Mat tmp =imread(value.last_one, cv::IMREAD_UNCHANGED);
+                    tmp.copyTo(value.last_image);
+                }
+            }
         }
     }
     else
@@ -69,7 +181,24 @@ Player::Player(std::string config_file)
         std::cout<<"configuration not ok. missing opportunity"<<std::endl;
     }
 }
-
+void Player::transparency(cv::Mat img)
+{
+    for(int i = 0; i < img.rows; i++)
+    {
+        for(int j = 0; j < img.cols; j++)
+        {
+            cv::Vec4b & pixel = img.at<cv::Vec4b>(i, j);
+            if(pixel[3] == 255)
+            {
+                pixel[0] =pixel[1] =pixel[2] = 127;
+            }
+            else
+            {
+                pixel[3] = 0;
+            }
+        }
+    }
+}
 
 /**
  * @brief this function will glue the images together. It is used internally to "insert" some image over the image  to be displayed.
@@ -80,11 +209,32 @@ Player::Player(std::string config_file)
  */
 void Player::glue(cv::Mat src, cv::Mat dst, cv::Rect region)
 {
+
     cv::Mat mask;
     std::vector<cv::Mat> rgbLayer;
+    
     cv::split(src, rgbLayer); // seperate channels
-    cv::Mat cs[3] = {rgbLayer[0], rgbLayer[1], rgbLayer[2]};
-    cv::merge(cs, 3, src); // glue together again
-    mask = rgbLayer[3];    // png's alpha channel used as mask
-    src.copyTo(dst(region), mask);
+
+    for(int i = 0; i < src.rows; i++)
+    {
+        for(int j = 0; j < src.cols; j++)
+        {
+            cv::Vec4b & pixel_src = src.at<cv::Vec4b>(i, j);
+            cv::Vec3b & pixel_dst = dst.at<cv::Vec3b>(i, j);
+            
+            if(pixel_src[3] != 0)
+            {
+                pixel_dst[0] = pixel_src[0]*(1-1/pixel_src[3]) + pixel_dst[0]*(1/pixel_src[3]);
+                pixel_dst[1] = pixel_src[1]*(1-1/pixel_src[3]) + pixel_dst[1]*(1/pixel_src[3]);
+                pixel_dst[2] = pixel_src[2]*(1-1/pixel_src[3]) + pixel_dst[2]*(1/pixel_src[3]);
+            }
+            else
+            {
+                pixel_dst[0] = pixel_src[0];
+                pixel_dst[1] = pixel_src[1];
+                pixel_dst[2] = pixel_src[2];
+            }
+        }
+    }
+
 }

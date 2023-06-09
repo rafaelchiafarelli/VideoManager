@@ -7,7 +7,7 @@
 #include <atomic>
 #include <thread>
 #include <opencv2/opencv.hpp>
-
+#include <mutex>
 class Player
 {
 private:
@@ -16,9 +16,12 @@ private:
     std::vector<std::string> OnDemandListName;
     std::thread work;
     std::atomic_bool alive;
-    void work_func();
+    void transparency(cv::Mat img);
+    void work_func(int,int);
+    std::mutex mu;
+
 public:
-    void Start();
+    void Start(int width, int heigh);
     void Stop();
     void OnDemand(std::string name);
     Player(std::string config_file);

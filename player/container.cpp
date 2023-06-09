@@ -46,6 +46,24 @@ bool ret = false;
                             std::cout<<"error: name not in sequence"<<std::endl;
                             continue;
                         }
+
+                        if(sequence.contains("repeat"))
+                        {
+                            if(sequence["repeat"].type()==json::value_t::number_unsigned)
+                            {
+                                tmp.repeat = sequence["repeat"];
+                            }
+                            else
+                            {
+                                tmp.repeat = 0;
+                            }
+                        }
+                        else
+                        {
+                            std::cout<<"error pos does not contains y coordinates"<<std::endl;
+                            continue;
+                        }
+
                         if(sequence.contains("type"))
                         {
                             if(sequence["type"].type() == json::value_t::string)
@@ -196,7 +214,7 @@ bool ret = false;
                         }
                     //can load the images now
                     //copy the image to a map (name , PlayImage) and then start's loading the images
-                    
+                    tmp.region = cv::Rect(tmp.x,tmp.y,tmp.w,tmp.h);
                     sequences.emplace(std::make_pair(tmp.name,tmp));                        
                     
                     }

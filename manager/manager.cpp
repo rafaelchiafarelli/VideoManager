@@ -1,29 +1,23 @@
 #include "manager.hpp"
 
 
-
+#include <chrono>
 #include <stdio.h>
 #include "player.hpp"
 #include "manager.hpp"
-#include <opencv2/opencv.hpp>
+
 using namespace cv;
 int main(int argc, char** argv )
 {
     
-    if ( argc != 2 )
+    Player P("./test_player.json");
+
+    P.Start(1080,1920);
+    int count =0;
+    while(count < 100)
     {
-        printf("usage: DisplayImage.out <Image_Path>\n");
-        return -1;
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+        count+=1;
     }
-    Mat image;
-    image = imread( argv[1], IMREAD_COLOR );
-    if ( !image.data )
-    {
-        printf("No image data \n");
-        return -1;
-    }
-    namedWindow("Display Image", WINDOW_AUTOSIZE );
-    imshow("Display Image", image);
-    waitKey(0);
     return 0;
 }

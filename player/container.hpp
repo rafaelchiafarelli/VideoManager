@@ -54,17 +54,34 @@ typedef enum
 
 class PlayImage
 {
+    private:
+
 public:
     std::string name;
+
     TypeOfImage type;
-    int x, y, w, h;
+    int cur_index;
+    int cur_repeat;  
+
+    int x, y, w, h, repeat;
+
+    cv::Rect region;
+
     std::string last_one;
     cv::Mat last_image;
 
     std::vector<std::string> names;
     std::vector<cv::Mat> images;
 
-    int cur_index;
+    std::string tostring(){
+        std::string ret;
+        ret.append("name:");
+        ret.append(name);
+        ret.append(", last_one:");
+        ret.append(last_one);
+        return ret;
+    };
+
     void clear(){
         name = "";
         type = invalid;
@@ -73,11 +90,11 @@ public:
         w = -1;
         h = -1;
         last_one = "";
-        last_image.release();
         names.clear();
         
     }
     PlayImage(const PlayImage &p):
+                name{p.name},
                 type{p.type},
                 last_one{p.last_one},
                 last_image{p.h,p.w,CV_8UC4,cv::Scalar(0,0,0,255)},
@@ -86,8 +103,11 @@ public:
                 w{p.w},
                 h{p.h},
                 names{p.names},
-                cur_index{0}
+                region{p.region},
+                cur_index{0},
+                cur_repeat{0}
             {
+        
         images.reserve(names.size());
         for (size_t i = 0; i < names.size(); i++) {
             // Uninitialized Mat of specified size, header constructed in place
@@ -95,29 +115,6 @@ public:
         }
     };
 
-    PlayImage(TypeOfImage  t,
-            int _x, 
-            int _y,
-            int _w,
-            int _h,
-            std::vector<std::string> _names, 
-            std::string _last_one):
-                type{t},
-                last_one{_last_one},
-                last_image{h,w,CV_8UC4,cv::Scalar(0,0,0,255)},
-                x{_x},
-                y{_y},
-                w{_w},
-                h{_h},
-                names{_names},
-                cur_index{0}
-            {
-        images.reserve(names.size());
-        for (size_t i = 0; i < names.size(); i++) {
-            // Uninitialized Mat of specified size, header constructed in place
-            images.emplace_back(h, w,CV_8UC4, cv::Scalar(0,0,0,255));
-        }
-    };
     PlayImage() {};
 };
 
@@ -125,7 +122,9 @@ class container
 {
 private:
     json raw_data;
+    void glue(cv::Mat src, cv::Mat dst, cv::Rect region);
 public:
     std::map<std::string,PlayImage> sequences;
+    
     bool parser(std::string filename);
 };
