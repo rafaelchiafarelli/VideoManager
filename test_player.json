@@ -2,7 +2,7 @@
 {
     "window":[1080,1920],
     "window_number":1,
-    "step_ms":100,
+    "step_ms":200,
     "ondemand_max":5,
     
     "sequences":[
@@ -10,7 +10,7 @@
     "name":"Fundo",
     "type":"permanent",
     "order":"background",
-    "repeat":0,
+    "repeat":3,
     "pos":{"x":0, "y":0,"w":800, "h":600},
     "names":[
     "/home/skiafa/workspace/VideoManager/pictures/sleep_1.png",
@@ -19,7 +19,11 @@
     "/home/skiafa/workspace/VideoManager/pictures/sleep_4.png",
     "/home/skiafa/workspace/VideoManager/pictures/sleep_5.png"
     ],
-    "last_one":"/home/skiafa/workspace/VideoManager/pictures/sleep_over.png"
+    "last_one":{
+        "has_last":true,
+        "file_name":"/home/skiafa/workspace/VideoManager/pictures/sleep_over.png"
+        }
+
     },
     {
     "name":"Magistrado",
@@ -34,6 +38,9 @@
     "/home/skiafa/workspace/VideoManager/pictures/sleep_4.png",
     "/home/skiafa/workspace/VideoManager/pictures/sleep_5.png"
     ],
-    "last_one":"/home/skiafa/workspace/VideoManager/pictures/sleep_over.png"
+    "last_one":{
+        "has_last":true,
+        "file_name":"/home/skiafa/workspace/VideoManager/pictures/sleep_over.png"
+        }
     }]
 }

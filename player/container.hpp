@@ -67,6 +67,7 @@ public:
 
     cv::Rect region;
 
+    bool has_last;
     std::string last_one;
     cv::Mat last_image;
 
@@ -79,6 +80,21 @@ public:
         ret.append(name);
         ret.append(", last_one:");
         ret.append(last_one);
+        ret.append(", type:");
+        if(type == ondemand)
+            ret.append("ondemand");
+        else if(type == permanent)
+            ret.append("permanent");
+        else if(type == invalid)                
+            ret.append("invalid");
+        else 
+            ret.append("not_allowed");
+
+        ret.append(", has_last:");
+        if(has_last)
+            ret.append("true");
+        else
+            ret.append("false");
         return ret;
     };
 
@@ -90,6 +106,10 @@ public:
         w = -1;
         h = -1;
         last_one = "";
+        has_last = false;
+
+        cur_index = 0;
+        cur_repeat = 0;
         names.clear();
         
     }
@@ -104,8 +124,10 @@ public:
                 h{p.h},
                 names{p.names},
                 region{p.region},
+                repeat{p.repeat},
                 cur_index{0},
-                cur_repeat{0}
+                cur_repeat{0},
+                has_last{p.has_last}
             {
         
         images.reserve(names.size());
@@ -115,7 +137,23 @@ public:
         }
     };
 
-    PlayImage() {};
+    PlayImage():name{""},
+                cur_index{0},
+                cur_repeat{0},
+                type{invalid},
+                x{0},
+                y{0},
+                w{0},
+                h{0},
+                repeat{0},
+                region{cv::Rect(0,0,0,0)},
+                has_last{false},
+                last_one{""}{};
+    ~PlayImage(){
+        names.clear();
+        images.clear();
+        
+    }
 };
 class application
 {

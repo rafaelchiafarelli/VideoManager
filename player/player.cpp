@@ -1,5 +1,6 @@
 #include "player.hpp"
 #include <stdio.h>
+#include <fstream> // included asked for compile version in orange pi
 #include <iostream>
 #include <chrono>
 
@@ -41,24 +42,20 @@ void Player::work_func(int w, int h, int step){
         cv::Mat screen_img(w,h,CV_8UC3, cv::Scalar(0,0,0) );        
         for(auto &sequence: c.sequences)
         { 
-            
-            
             if(sequence.second.type == permanent)
             {
                 if(sequence.second.cur_index >= sequence.second.images.size())
                 {
                     if(sequence.second.cur_repeat >= sequence.second.repeat)
                     {
-                        if(sequence.second.last_one.empty())
+                        if(sequence.second.has_last == false) //must restart
                         {
                             sequence.second.cur_index = 0;
                             sequence.second.cur_repeat = 0;
-                            
                             glue(sequence.second.images[sequence.second.cur_index], screen_img, sequence.second.region);
                         }
                         else
                         {
-
                             glue(sequence.second.last_image,screen_img,sequence.second.region);
                         }
                     }
@@ -66,20 +63,17 @@ void Player::work_func(int w, int h, int step){
                     {
                         sequence.second.cur_index = 0;
                         sequence.second.cur_repeat += 1;
-                        
                         glue(sequence.second.images[sequence.second.cur_index], screen_img, sequence.second.region);
                     }
                 }
                 else
                 {
-                    
                     glue(sequence.second.images[sequence.second.cur_index], screen_img, sequence.second.region);
                     sequence.second.cur_index+=1;
                 }                
             }
             else //if it is not permanent, it is ondemand
             {
-                //lock mutex 
                 bool go_for_it = false;
                 std::vector<std::string>::iterator it;
                 {
@@ -87,8 +81,6 @@ void Player::work_func(int w, int h, int step){
                     it = std::find(OnDemandListName.begin(), OnDemandListName.end(),sequence.second.name);
                     go_for_it = (it != OnDemandListName.end());
                 }
-                
-
                 if(go_for_it)
                 {
                     std::cout<<"ondemand :"<<sequence.second.name<<std::endl;
@@ -124,7 +116,6 @@ void Player::work_func(int w, int h, int step){
                         sequence.second.cur_index+=1;
                     }
                 }
-                //
             }
         }
         std::cout<<"Display image"<<std::endl;
@@ -142,7 +133,7 @@ Player::Player(std::string config_file)
         for(auto &sequence: c.sequences)
         {
             
-            std::cout<<"name:"<<sequence.second.name<<std::endl;
+            std::cout<<"sequence:"<<sequence.second.tostring()<<std::endl;
             if(sequence.second.names.size() != sequence.second.images.size())
             {
                 std::cout<<"error: wrong size names:"<<sequence.second.names.size()<<" images:"<<sequence.second.images.size()<<std::endl;
@@ -164,15 +155,19 @@ Player::Player(std::string config_file)
                     continue;
                 }
             }
-            if(!sequence.second.last_one.empty())
+            if(sequence.second.has_last == true && !sequence.second.last_one.empty())
             {
-                std::cout<<"name of current file:"<<sequence.second.last_one<<std::endl;
+                std::cout<<"load last image"<<sequence.second.last_one<<std::endl;
                 std::ifstream img_f(sequence.second.last_one);
                 if(img_f.good())
                 {
                     cv::Mat tmp =imread(sequence.second.last_one, cv::IMREAD_UNCHANGED);
                     tmp.copyTo(sequence.second.last_image);
                 }
+            }
+            else
+            {
+                std::cout<<"does not contains a last image"<<std::endl;
             }
         }
     }
@@ -209,18 +204,17 @@ void Player::transparency(cv::Mat img)
  */
 void Player::glue(cv::Mat src, cv::Mat dst, cv::Rect region)
 {
-
-    cv::Mat mask;
+    cv::Mat sized;
+    cv::resize(src, sized, cv::Size(region.width, region.height), cv::INTER_LINEAR);
     std::vector<cv::Mat> rgbLayer;
-    
     cv::split(src, rgbLayer); // seperate channels
 
-    for(int i = 0; i < src.rows; i++)
+    for(int i = 0; i < sized.rows; i++)
     {
-        for(int j = 0; j < src.cols; j++)
+        for(int j = 0; j < sized.cols; j++)
         {
-            cv::Vec4b & pixel_src = src.at<cv::Vec4b>(i, j);
-            cv::Vec3b & pixel_dst = dst.at<cv::Vec3b>(i, j);
+            cv::Vec4b & pixel_src = sized.at<cv::Vec4b>(i, j);
+            cv::Vec3b & pixel_dst = dst.at<cv::Vec3b>(i + region.x, j + region.y);
             
             if(pixel_src[3] != 0)
             {

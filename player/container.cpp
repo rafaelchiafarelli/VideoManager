@@ -227,11 +227,49 @@ bool ret = false;
                         {
                             std::cout<<"error: sequence does not contains files names"<<std::endl;
                         }
+                        
                         if(sequence.contains("last_one"))
                         {
-                            if(sequence["last_one"].type() == json::value_t::string)
+                            if(sequence["last_one"].type() == json::value_t::object)
                             {
-                                tmp.last_one = sequence["last_one"];
+                                if(sequence["last_one"].contains("has_last"))
+                                {
+                                    if(sequence["last_one"]["has_last"].type() == json::value_t::boolean)
+                                    {
+                                        if(sequence["last_one"].contains("file_name"))
+                                        {
+                                            if(sequence["last_one"]["file_name"].type() == json::value_t::string)
+                                            {
+                                                tmp.has_last = sequence["last_one"]["has_last"];
+                                                tmp.last_one = sequence["last_one"]["file_name"];
+                                            }
+                                            else
+                                            {
+                                                std::cout<<"error: file_name not a string"<<std::endl;
+                                                continue;
+
+                                            }                                            
+                                        }
+                                        else
+                                        {
+                                            std::cout<<"error: last_one does not contains filename"<<std::endl;
+                                            continue;
+
+                                        }                                        
+                                    }
+                                    else
+                                    {
+                                        std::cout<<"error: last_one:has_last is not boolean"<<std::endl;
+                                        continue;
+
+                                    }
+                                }
+                                else
+                                {
+                                    std::cout<<"error: last_one does not contains a has_last"<<std::endl;
+                                    continue;
+
+                                }                                
                             }
                             else
                             {
@@ -241,7 +279,6 @@ bool ret = false;
                             }
                         }
                         else
-
                         {
                             std::cout<<"error: sequence does not contains last_one"<<std::endl;
                             continue;
