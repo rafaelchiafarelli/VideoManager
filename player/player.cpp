@@ -56,7 +56,7 @@ void Player::work_func(int w, int h, int step){
     while(alive)
     {   
         //the index of the image is the order on witch it is inserted
-        cv::Mat screen_img(w,h,CV_8UC3, cv::Scalar(0,0,0) );        
+        cv::Mat screen_img(h,w,CV_8UC3, cv::Scalar(0,0,0) );        
         for(auto &sequence: c.sequences)
         { 
             if(sequence.second.type == permanent)
