@@ -6,10 +6,27 @@
 
 #include "opencv2/opencv.hpp"
 
-void Player::OnDemand(std::string name)
+bool Player::OnDemand(std::string name)
 {
-    /* play on demand */
-    OnDemandListName.push_back(name);
+    std::vector<std::string>::iterator it;
+    std::lock_guard<std::mutex> lock(mu);
+    for(auto &sequence: c.sequences)
+    {
+        
+        if(!name.compare(sequence.second.name)) //found one
+        {
+            if(OnDemandListName.size() < c.app.ondemand_max)
+            {
+                OnDemandListName.push_back(name);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+    return false;
 }
 
 void Player::Start()
@@ -83,24 +100,37 @@ void Player::work_func(int w, int h, int step){
                 }
                 if(go_for_it)
                 {
-                    std::cout<<"ondemand :"<<sequence.second.name<<std::endl;
+                    
                     if(sequence.second.cur_index >= sequence.second.images.size())
                     {
                         if(sequence.second.cur_repeat >= sequence.second.repeat)
                         {
-                            if(sequence.second.last_one.empty())
+                            if(sequence.second.has_last == false)
                             {
+                                if(sequence.second.last_one.empty())
+                                {
+                                    sequence.second.cur_index = 0;
+                                    sequence.second.cur_repeat = 0;
+                                    {
+                                        std::lock_guard<std::mutex> lock(mu);
+                                        OnDemandListName.erase(it);
+                                    }
+                                }
+                                else
+                                {
+                                    //just show the last one
+                                    glue(sequence.second.last_image,screen_img,sequence.second.region);
+                                }
+                            }
+                            else
+                            {
+
                                 sequence.second.cur_index = 0;
                                 sequence.second.cur_repeat = 0;
                                 {
                                     std::lock_guard<std::mutex> lock(mu);
                                     OnDemandListName.erase(it);
                                 }
-                            }
-                            else
-                            {
-                                //just show the last one
-                                glue(sequence.second.last_image,screen_img,sequence.second.region);
                             }
                         }
                         else
@@ -118,7 +148,7 @@ void Player::work_func(int w, int h, int step){
                 }
             }
         }
-        std::cout<<"Display image"<<std::endl;
+        
         cv::imshow("Display",screen_img);
         //display the image mixed
         cv::waitKey(step);
@@ -221,12 +251,6 @@ void Player::glue(cv::Mat src, cv::Mat dst, cv::Rect region)
                 pixel_dst[0] = pixel_src[0]*(1-1/pixel_src[3]) + pixel_dst[0]*(1/pixel_src[3]);
                 pixel_dst[1] = pixel_src[1]*(1-1/pixel_src[3]) + pixel_dst[1]*(1/pixel_src[3]);
                 pixel_dst[2] = pixel_src[2]*(1-1/pixel_src[3]) + pixel_dst[2]*(1/pixel_src[3]);
-            }
-            else
-            {
-                pixel_dst[0] = pixel_src[0];
-                pixel_dst[1] = pixel_src[1];
-                pixel_dst[2] = pixel_src[2];
             }
         }
     }

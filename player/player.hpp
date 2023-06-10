@@ -23,7 +23,7 @@ private:
 public:
     void Start();
     void Stop();
-    void OnDemand(std::string name);
+    bool OnDemand(std::string name);
     Player(std::string config_file);
     ~Player(){
         if(alive)

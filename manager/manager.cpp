@@ -18,6 +18,31 @@ int main(int argc, char** argv )
         P.OnDemand("nome");
         return "Hello world!";
     });
+    /*
+    {
+        "ondemand":name_of_sequence
+    }
+    
+    */
+    CROW_ROUTE(app, "/json")
+        .methods("POST"_method)
+    ([&](const crow::request& req){
+        auto raw = crow::json::load(req.body);
+        if (!raw)
+            return crow::response(400);
+        
+        if(raw.has("ondemand"))
+        {
+            if(raw["ondemand"].t() == crow::json::type::String)
+            {
+                std::string name = raw["ondemand"].s();
+                if(!P.OnDemand(name)){
+                    return crow::response(404);
+                }
+            }
+        }
+        return crow::response{"loaded"};
+    });
 
     
     P.Start();
