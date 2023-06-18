@@ -193,9 +193,8 @@ void Player::load_config(std::string config_file)
                 std::ifstream img_f(f_name);
                 if(img_f.good())
                 {
-                    cv::Mat tmp =imread(f_name, cv::IMREAD_UNCHANGED);
-                    cv::resize(tmp, tmp, cv::Size(sequence.second.w, sequence.second.h), cv::INTER_LINEAR);
-                    tmp.copyTo(sequence.second.images[i]);
+
+                    sequence.second.images[i] = f_name;
                 }
                 else
                 {
@@ -209,9 +208,7 @@ void Player::load_config(std::string config_file)
                 std::ifstream img_f(sequence.second.last_one);
                 if(img_f.good())
                 {
-                    cv::Mat tmp =imread(sequence.second.last_one, cv::IMREAD_UNCHANGED);
-                    cv::resize(tmp, tmp, cv::Size(sequence.second.w, sequence.second.h), cv::INTER_LINEAR);
-                    tmp.copyTo(sequence.second.last_image);
+                    sequence.second.last_image = sequence.second.last_one;
                 }
             }
             else
@@ -251,8 +248,9 @@ void Player::transparency(cv::Mat img)
  * @param dst is the image destination (the image to get pixels to)
  * @param region is the region to be overriden
  */
-void Player::glue(cv::Mat src, cv::Mat dst, cv::Rect region)
+void Player::glue(std::string f_name, cv::Mat dst, cv::Rect region)
 {
+    cv::Mat src = cv::imread(f_name, cv::IMREAD_UNCHANGED);
     std::vector<cv::Mat> rgbLayer;
     cv::split(src, rgbLayer); // seperate channels
     for(int i = 0; i < src.rows; i++)

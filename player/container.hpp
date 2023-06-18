@@ -70,10 +70,10 @@ public:
 
     bool has_last;
     std::string last_one;
-    cv::Mat last_image;
+    std::string last_image;
 
     std::vector<std::string> names;
-    std::vector<cv::Mat> images;
+    std::vector<std::string> images;
 
     std::string tostring(){
         std::string ret = "{";
@@ -157,7 +157,7 @@ public:
                 key(p.key),
                 type{p.type},
                 last_one{p.last_one},
-                last_image{p.h,p.w,CV_8UC4,cv::Scalar(0,0,0,255)},
+                last_image{""},
                 x{p.x},
                 y{p.y},
                 w{p.w},
@@ -173,7 +173,7 @@ public:
         images.reserve(names.size());
         for (size_t i = 0; i < names.size(); i++) {
             // Uninitialized Mat of specified size, header constructed in place
-            images.emplace_back(h, w,CV_8UC4, cv::Scalar(0,0,0,255));
+            images.emplace_back("");
         }
     };
 

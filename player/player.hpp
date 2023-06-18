@@ -12,7 +12,7 @@ class Player
 {
 private:
 
-    void glue(cv::Mat src, cv::Mat dst, cv::Rect region);
+    void glue(std::string f_name, cv::Mat dst, cv::Rect region);
     std::string config_file;
     void load_config(std::string config_file);
     std::thread work;
