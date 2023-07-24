@@ -1,3 +1,4 @@
+
 #include "player.hpp"
 #include <stdio.h>
 #include <fstream> // included asked for compile version in orange pi
@@ -35,6 +36,7 @@ void Player::Start()
     alive = true;
     
     work = std::thread(&Player::work_func,this,c.app.window_x,c.app.window_y, c.app.step_ms);
+    
 }
 
 void Player::Stop()

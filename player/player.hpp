@@ -11,6 +11,7 @@
 class Player
 {
 private:
+
     void glue(cv::Mat src, cv::Mat dst, cv::Rect region);
     container c;
     std::vector<std::string> OnDemandListName;
@@ -23,6 +24,7 @@ private:
 public:
     void Start();
     void Stop();
+    std::vector<std::string> OnDemandListName;
     bool OnDemand(std::string name);
     Player(std::string config_file);
     ~Player(){
