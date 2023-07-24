@@ -16,8 +16,8 @@ add_subdirectory(manager)
 
 
 find_package(Threads REQUIRED)
-
+find_package(CURL REQUIRED)
 
 file(COPY data.json DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/ )
 file(COPY test_player.json DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/ )
-target_link_libraries( FullTest ${Boost_LIBRARIES} ${OpenCV_LIBS} player Threads::Threads curl )
+target_link_libraries( FullTest ${Boost_LIBRARIES} ${OpenCV_LIBS} player Threads::Threads -lcurl)

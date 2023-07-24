@@ -9,6 +9,11 @@
 #include <vector>
 using namespace cv;
 using namespace std;
+
+std::string character_name = "animus";
+std::string IP_Address = "192.168.1.106";
+std::atomic_bool alive;
+void register_func();
 int main(int argc, char** argv )
 {
     
