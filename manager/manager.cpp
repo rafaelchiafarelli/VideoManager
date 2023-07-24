@@ -6,13 +6,15 @@
 #include "player.hpp"
 #include <fstream>
 #include <curl/curl.h>
+#include <vector>
 using namespace cv;
 using namespace std;
 int main(int argc, char** argv )
 {
     
     Player P("./test_player.json");
-    std::thread register_to_server = std::thread(&register_func,this).detach();
+    std::thread register_to_server = std::thread{&register_func};
+    register_to_server.detach();
     crow::SimpleApp app;
 
     CROW_ROUTE(app, "/")
