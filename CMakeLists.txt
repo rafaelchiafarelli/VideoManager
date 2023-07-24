@@ -17,7 +17,6 @@ add_subdirectory(manager)
 
 find_package(Threads REQUIRED)
 
-f
 
 file(COPY data.json DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/ )
 file(COPY test_player.json DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/ )

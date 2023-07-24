@@ -1,0 +1,15 @@
+[Unit]
+Description="Manager for devices and configurations"
+
+[Service]
+User=controlroom
+Group=www-data
+WorkingDirectory=/home/controlroom/SOMA/
+VIRTUAL_ENV=/home/controlroom/SOMA/venv
+Environment=PATH=$VIRTUAL_ENV/bin:$PATH
+ExecStart=/home/orangepi/VideoManager/assets/manager.sh
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target
