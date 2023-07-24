@@ -14,7 +14,7 @@ private:
 
     void glue(cv::Mat src, cv::Mat dst, cv::Rect region);
     container c;
-    std::vector<std::string> OnDemandListName;
+    
     std::thread work;
     std::atomic_bool alive;
     void transparency(cv::Mat img);
