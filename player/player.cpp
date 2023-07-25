@@ -140,7 +140,20 @@ void Player::work_func(int w, int h, int step){
         
         cv::imshow("Display",screen_img);
         //display the image mixed
-        cv::waitKey(step);
+        char key = (char)cv::waitKey(step);
+        
+        std::string key_str{key};
+        
+        for(auto &sequence: c.sequences)
+        {
+            
+            if(!sequence.second.key.compare(key_str))
+            {
+                std::cout<<"found a key. schedule a job"<<std::endl;
+                OnDemand(sequence.second.name);
+            }
+        }
+        
     }
 }
 Player::Player(std::string config_file)

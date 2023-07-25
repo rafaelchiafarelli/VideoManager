@@ -13,34 +13,35 @@
     "repeat":3,
     "pos":{"x":0, "y":0,"w":800, "h":600},
     "names":[
-    "/home/skiafa/workspace/VideoManager/pictures/sleep_1.png",
-    "/home/skiafa/workspace/VideoManager/pictures/sleep_2.png",
-    "/home/skiafa/workspace/VideoManager/pictures/sleep_3.png",
-    "/home/skiafa/workspace/VideoManager/pictures/sleep_4.png",
-    "/home/skiafa/workspace/VideoManager/pictures/sleep_5.png"
+    "/home/pi/workspace/VideoManager/pictures/sleep_1.png",
+    "/home/pi/workspace/VideoManager/pictures/sleep_2.png",
+    "/home/pi/workspace/VideoManager/pictures/sleep_3.png",
+    "/home/pi/workspace/VideoManager/pictures/sleep_4.png",
+    "/home/pi/workspace/VideoManager/pictures/sleep_5.png"
     ],
     "last_one":{
         "has_last":true,
-        "file_name":"/home/skiafa/workspace/VideoManager/pictures/sleep_over.png"
+        "file_name":"/home/pi/workspace/VideoManager/pictures/sleep_over.png"
         }
 
     },
     {
     "name":"Magistrado",
     "type":"ondemand",
+    "key":"1",
     "order":"foreground",
     "repeat":10,
     "pos":{"x":0, "y":0,"w":800, "h":600},
     "names":[
-    "/home/skiafa/workspace/VideoManager/pictures/sleep_1.png",
-    "/home/skiafa/workspace/VideoManager/pictures/sleep_2.png",
-    "/home/skiafa/workspace/VideoManager/pictures/sleep_3.png",
-    "/home/skiafa/workspace/VideoManager/pictures/sleep_4.png",
-    "/home/skiafa/workspace/VideoManager/pictures/sleep_5.png"
+    "/home/pi/workspace/VideoManager/pictures/sleep_1.png",
+    "/home/pi/workspace/VideoManager/pictures/sleep_2.png",
+    "/home/pi/workspace/VideoManager/pictures/sleep_3.png",
+    "/home/pi/workspace/VideoManager/pictures/sleep_4.png",
+    "/home/pi/workspace/VideoManager/pictures/sleep_5.png"
     ],
     "last_one":{
         "has_last":true,
-        "file_name":"/home/skiafa/workspace/VideoManager/pictures/sleep_over.png"
+        "file_name":"/home/pi/workspace/VideoManager/pictures/sleep_over.png"
         }
     }]
 }

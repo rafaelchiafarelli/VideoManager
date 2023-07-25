@@ -65,7 +65,8 @@ bool ret = false;
                     {
                         tmp.clear();
                         if(sequence.contains("name"))
-                        {    if(sequence["name"].type() == json::value_t::string)
+                        {    
+                            if(sequence["name"].type() == json::value_t::string)
                             {
                                 tmp.name = sequence["name"];
                             }
@@ -79,6 +80,22 @@ bool ret = false;
                         {
                             std::cout<<"error: name not in sequence"<<std::endl;
                             continue;
+                        }
+                        if(sequence.contains("key"))
+                        {    
+                            std::cout<<"key found:"<<sequence["key"]<<std::endl;
+                            if(sequence["key"].type() == json::value_t::string)
+                            {
+                                tmp.key = sequence["key"];
+                            }
+                            else
+                            {
+                                std::cout<<"error: key not string"<<std::endl;
+                            }
+                        }
+                        else
+                        {
+                            std::cout<<"error: key not in sequence"<<std::endl;
                         }
 
                         if(sequence.contains("repeat"))

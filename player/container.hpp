@@ -58,7 +58,7 @@ class PlayImage
 
 public:
     std::string name;
-
+    std::string key;
     TypeOfImage type;
     int cur_index;
     int cur_repeat;  
@@ -78,6 +78,8 @@ public:
         std::string ret;
         ret.append("name:");
         ret.append(name);
+        ret.append(", key:");
+        ret.append(key);
         ret.append(", last_one:");
         ret.append(last_one);
         ret.append(", type:");
@@ -115,6 +117,7 @@ public:
     }
     PlayImage(const PlayImage &p):
                 name{p.name},
+                key(p.key),
                 type{p.type},
                 last_one{p.last_one},
                 last_image{p.h,p.w,CV_8UC4,cv::Scalar(0,0,0,255)},
@@ -138,6 +141,7 @@ public:
     };
 
     PlayImage():name{""},
+                key{""},
                 cur_index{0},
                 cur_repeat{0},
                 type{invalid},
