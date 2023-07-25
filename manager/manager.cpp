@@ -13,12 +13,12 @@ using namespace std;
 std::string character_name = "animus";
 std::string IP_Address = "192.168.1.106";
 std::atomic_bool alive;
-void register_func();
+void register_func(Player &P);
 int main(int argc, char** argv )
 {
     
     Player P("./test_player.json");
-    std::thread register_to_server = std::thread{&register_func};
+    std::thread register_to_server = std::thread(&register_func, std::ref(P));
     register_to_server.detach();
     crow::SimpleApp app;
 
@@ -74,7 +74,7 @@ int main(int argc, char** argv )
     std::this_thread::sleep_for (std::chrono::seconds(1));
     return 0;
 }
-void register_func(Player P){
+void register_func(Player &P){
 
     CURLcode ret;
     CURL *hnd;
