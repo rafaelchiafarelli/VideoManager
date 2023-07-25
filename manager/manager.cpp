@@ -89,7 +89,7 @@ void register_func(Player &P){
 
         hnd = curl_easy_init();
         curl_easy_setopt(hnd, CURLOPT_BUFFERSIZE, 102400L);
-        curl_easy_setopt(hnd, CURLOPT_URL, "https://192.168.1.104:5000/device_register");
+        curl_easy_setopt(hnd, CURLOPT_URL, "https://192.168.1.104/device_register");
         curl_easy_setopt(hnd, CURLOPT_NOPROGRESS, 1L);
         std::string register_json = "{\"character\":\"";
         register_json += character_name;
@@ -113,7 +113,7 @@ void register_func(Player &P){
         }
         register_json+="]}";
 
-
+        print("json:%s",register_json.c_str());
         curl_easy_setopt(hnd, CURLOPT_POSTFIELDS, register_json);
         curl_easy_setopt(hnd, CURLOPT_POSTFIELDSIZE_LARGE, (curl_off_t)45);
         curl_easy_setopt(hnd, CURLOPT_HTTPHEADER, slist1);
@@ -134,10 +134,12 @@ void register_func(Player &P){
 
         if((int)ret == 200)
         {
+            print("manager did log to the server");
             break;
         }
         else
         {
+            print("manager did not find the server try again in 1 sec");
             std::this_thread::sleep_for (std::chrono::seconds(1));
         }
     }
