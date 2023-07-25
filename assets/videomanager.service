@@ -2,12 +2,12 @@
 Description="Manager for devices and configurations"
 
 [Service]
-User=controlroom
+User=pi
 Group=www-data
-WorkingDirectory=/home/controlroom/SOMA/
-VIRTUAL_ENV=/home/controlroom/SOMA/venv
-Environment=PATH=$VIRTUAL_ENV/bin:$PATH
-ExecStart=/home/orangepi/VideoManager/assets/manager.sh
+WorkingDirectory=/home/pi/VideoManager/
+Environment=XAUTHORITY=/home/pi/.Xauthority
+Environment=DISPLAY=:0.0
+ExecStart=/home/pi/VideoManager/assets/manager.sh
 Restart=on-failure
 RestartSec=5s
 
