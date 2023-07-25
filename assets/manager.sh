@@ -1,5 +1,5 @@
 #!/bin/bash
 
 cd ~
-cd VideoManager
-./build
+cd VideoManager/build/manager/
+./VideoManager
