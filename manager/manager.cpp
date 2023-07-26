@@ -63,7 +63,7 @@ int main(int argc, char** argv )
 
     P.Start();
     int count =0;
-    app.port(18080).run();
+    app.port(P.c.app.PORT).run();
     alive = false;
     P.Stop();
     std::this_thread::sleep_for (std::chrono::seconds(1));

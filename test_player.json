@@ -5,7 +5,7 @@
     "step_ms":200,
     "ondemand_max":5,
     "character":"magistrade",
-    "IP":"192.168.0.105",
+    "IP":"192.168.1.105",
     "PORT":8080,
     "type":"magistrade",
     "endpoints":["index","ondemand","json_store"],
