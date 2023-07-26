@@ -1,0 +1,52 @@
+
+{
+    "window":[640,480],
+    "window_number":1,
+    "step_ms":200,
+    "ondemand_max":5,
+    "character":"messenger",
+    "IP":"192.168.0.106",
+    "PORT":8080,
+    "type":"messenger",
+    "endpoints":["index","ondemand","json_store"],
+    "animations":[
+    {
+    "name":"Fundo",
+    "type":"permanent",
+    "key":"0",
+    "order":"background",
+    "repeat":3,
+    "pos":{"x":0, "y":0,"w":640, "h":480},
+    "names":[
+    "/home/orangepi/VideoManager/pictures/sleep_1.png",
+    "/home/orangepi/VideoManager/pictures/sleep_2.png",
+    "/home/orangepi/VideoManager/pictures/sleep_3.png",
+    "/home/orangepi/VideoManager/pictures/sleep_4.png",
+    "/home/orangepi/VideoManager/pictures/sleep_5.png"
+    ],
+    "last_one":{
+        "has_last":true,
+        "file_name":"/home/orangepi/VideoManager/pictures/sleep_over.png"
+        }
+
+    },
+    {
+    "name":"Messenger",
+    "type":"ondemand",
+    "key":"1",
+    "order":"foreground",
+    "repeat":10,
+    "pos":{"x":0, "y":0,"w":800, "h":600},
+    "names":[
+    "/home/orangepi/VideoManager/pictures/sleep_1.png",
+    "/home/orangepi/VideoManager/pictures/sleep_2.png",
+    "/home/orangepi/VideoManager/pictures/sleep_3.png",
+    "/home/orangepi/VideoManager/pictures/sleep_4.png",
+    "/home/orangepi/VideoManager/pictures/sleep_5.png"
+    ],
+    "last_one":{
+        "has_last":true,
+        "file_name":"/home/orangepi/VideoManager/pictures/sleep_over.png"
+        }
+    }]
+}
