@@ -11,7 +11,7 @@ bool Player::OnDemand(std::string name)
 {
     std::vector<std::string>::iterator it;
     std::lock_guard<std::mutex> lock(mu);
-    for(auto &sequence: c.sequences)
+    for(auto &sequence: c.animations)
     {
         
         if(!name.compare(sequence.second.name)) //found one
@@ -35,7 +35,7 @@ void Player::Start()
 
     alive = true;
     
-    work = std::thread(&Player::work_func,this,c.app.window_x,c.app.window_y, c.app.step_ms);
+    work = std::thread(&Player::work_func,this);
     
 }
 
@@ -45,9 +45,11 @@ void Player::Stop()
     work.join();
 
 }
-void Player::work_func(int w, int h, int step){
+void Player::work_func(){
     //create a black image of the desired size -- check size for OrangePi and RaspberryPi machines.
-    
+    int w = c.app.window_x;
+    int h = c.app.window_y;
+    int step = c.app.step_ms;
     //create a namedWindow
     //move to the appropriate place
     //set it as full screen
@@ -59,7 +61,7 @@ void Player::work_func(int w, int h, int step){
     {   
         //the index of the image is the order on witch it is inserted
         cv::Mat screen_img(h,w,CV_8UC3, cv::Scalar(0,0,0) );        
-        for(auto &sequence: c.sequences)
+        for(auto &sequence: c.animations)
         { 
             if(sequence.second.type == permanent)
             {
@@ -102,7 +104,7 @@ void Player::work_func(int w, int h, int step){
                 }
                 if(go_for_it)
                 {
-                    
+                    std::cout<<"must go for it!"<<sequence.second.name.c_str()<<std::endl;
                     if(sequence.second.cur_index >= sequence.second.images.size())
                     {
                         if(sequence.second.cur_repeat >= sequence.second.repeat)
@@ -144,12 +146,12 @@ void Player::work_func(int w, int h, int step){
         
         std::string key_str{key};
         
-        for(auto &sequence: c.sequences)
+        for(auto &sequence: c.animations)
         {
             
             if(!sequence.second.key.compare(key_str))
             {
-                std::cout<<"found a key. schedule a job"<<std::endl;
+                std::cout<<"found a key. schedule a job:"<<sequence.second.name.c_str()<<std::endl;
                 OnDemand(sequence.second.name);
             }
         }
@@ -162,7 +164,7 @@ Player::Player(std::string config_file)
     if(c.parser(config_file))
     {
         std::cout<<"configuration loaded -- loading images"<<std::endl;
-        for(auto &sequence: c.sequences)
+        for(auto &sequence: c.animations)
         {
             std::cout<<"sequence:"<<sequence.second.tostring()<<std::endl;
             if(sequence.second.x > c.app.window_x ||

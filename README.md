@@ -11,8 +11,8 @@
                 1.3 Connection 3: a Serial interface that will receive a command and execute it accordanly.
         2. The player object (it has a thread):
             + This is the thread that will execute the video by playing the std sequence and add the overlays as requested by user
-                2.1 sequences can be permanent (as they reach the end, they start from the beginning)
-                2.2 sequences can have a not known number of images
+                2.1 animations can be permanent (as they reach the end, they start from the beginning)
+                2.2 animations can have a not known number of images
         3. The general manager (main loop):
             + This thread monitors input from user (SIGINT and such), also monitors executions and keeps it clean after it ends.
 

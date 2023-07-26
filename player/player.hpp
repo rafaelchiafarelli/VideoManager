@@ -13,15 +13,16 @@ class Player
 private:
 
     void glue(cv::Mat src, cv::Mat dst, cv::Rect region);
-    container c;
+ 
     
     std::thread work;
     std::atomic_bool alive;
     void transparency(cv::Mat img);
-    void work_func(int,int,int);
+    void work_func();
     std::mutex mu;
 
 public:
+    container c;
     void Start();
     void Stop();
     std::vector<std::string> OnDemandListName;

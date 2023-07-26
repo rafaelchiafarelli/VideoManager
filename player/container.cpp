@@ -54,14 +54,87 @@ bool ret = false;
                 app.ondemand_max = raw_data["ondemand_max"];
             }
         }
-        if(raw_data.contains("sequences"))
+        if(raw_data.contains("character"))
         {
-            if(raw_data["sequences"].type() == json::value_t::array)
+            if(raw_data["character"].type() == json::value_t::string)
             {
-                if(raw_data["sequences"].size() > 0)
+                app.character = raw_data["character"];
+            }
+            else
+            {
+                std::cout<<"error: character not string"<<std::endl;
+            }
+        }        
+
+        if(raw_data.contains("IP"))
+        {
+            if(raw_data["IP"].type() == json::value_t::string)
+            {
+                app.IP = raw_data["IP"];
+            }
+            else
+            {
+                std::cout<<"error: IP not string"<<std::endl;
+            }
+        }    
+
+
+
+
+        if(raw_data.contains("PORT"))
+        {
+            if(raw_data["PORT"].type() == json::value_t::number_unsigned)
+            {
+                app.PORT = raw_data["PORT"];
+            }
+            else
+            {
+                std::cout<<"error: PORT not a number"<<std::endl;
+            }
+        }    
+
+        if(raw_data.contains("type"))
+        {
+            if(raw_data["type"].type() == json::value_t::string)
+            {
+                app.type = raw_data["type"];
+            }
+            else
+            {
+                std::cout<<"error: IP not string"<<std::endl;
+            }
+        }   
+
+        if(raw_data.contains("endpoints"))
+        {
+            if(raw_data["endpoints"].type() == json::value_t::array)
+            {
+                for(auto &f_endpoints: raw_data["endpoints"])
+                {
+                    if(f_endpoints.type() == json::value_t::string)
+                    {
+                        app.endpoints.push_back(f_endpoints);
+                    }
+                    else
+                    {
+                        std::cout<<"error: endpoint is not string"<<std::endl;
+                    }
+                }
+            }
+        }
+        else
+        {
+            std::cout<<"error: endpoints not present"<<std::endl;
+        }        
+
+        if(raw_data.contains("animations"))
+        {
+            if(raw_data["animations"].type() == json::value_t::array)
+            {
+                if(raw_data["animations"].size() > 0)
                 {
                     PlayImage tmp; //used to load the images
-                    for(auto &sequence: raw_data["sequences"])
+                    for(auto &sequence: raw_data["animations"])
                     {
                         tmp.clear();
                         if(sequence.contains("name"))
@@ -81,40 +154,6 @@ bool ret = false;
                             std::cout<<"error: name not in sequence"<<std::endl;
                             continue;
                         }
-                        if(sequence.contains("key"))
-                        {    
-                            std::cout<<"key found:"<<sequence["key"]<<std::endl;
-                            if(sequence["key"].type() == json::value_t::string)
-                            {
-                                tmp.key = sequence["key"];
-                            }
-                            else
-                            {
-                                std::cout<<"error: key not string"<<std::endl;
-                            }
-                        }
-                        else
-                        {
-                            std::cout<<"error: key not in sequence"<<std::endl;
-                        }
-
-                        if(sequence.contains("repeat"))
-                        {
-                            if(sequence["repeat"].type()==json::value_t::number_unsigned)
-                            {
-                                tmp.repeat = sequence["repeat"];
-                            }
-                            else
-                            {
-                                tmp.repeat = 0;
-                            }
-                        }
-                        else
-                        {
-                            std::cout<<"error pos does not contains y coordinates"<<std::endl;
-                            continue;
-                        }
-
                         if(sequence.contains("type"))
                         {
                             if(sequence["type"].type() == json::value_t::string)
@@ -138,7 +177,57 @@ bool ret = false;
                         {
                             std::cout<<"error: type not recognized"<<std::endl;
                             continue;
+                        }                        
+                        if(sequence.contains("key"))
+                        {    
+                            
+                            if(sequence["key"].type() == json::value_t::string)
+                            {
+                                tmp.key = sequence["key"];
+                            }
+                            else
+                            {
+                                std::cout<<"error: key not string"<<std::endl;
+                            }
                         }
+                        else
+                        {
+                            std::cout<<"error: key not in sequence"<<std::endl;
+                        }
+                        if(sequence.contains("order"))
+                        {    
+                            
+                            if(sequence["order"].type() == json::value_t::string)
+                            {
+                                tmp.order = sequence["order"];
+                            }
+                            else
+                            {
+                                std::cout<<"error: order not string"<<std::endl;
+                            }
+                        }
+                        else
+                        {
+                            std::cout<<"error: order not in sequence"<<std::endl;
+                        }
+                        if(sequence.contains("repeat"))
+                        {
+                            if(sequence["repeat"].type()==json::value_t::number_unsigned)
+                            {
+                                tmp.repeat = sequence["repeat"];
+                            }
+                            else
+                            {
+                                tmp.repeat = 0;
+                            }
+                        }
+                        else
+                        {
+                            std::cout<<"error pos does not contains y coordinates"<<std::endl;
+                            continue;
+                        }
+
+
                         if(sequence.contains("pos"))
                         {
                             if(sequence["pos"].type() == json::value_t::object)
@@ -303,7 +392,7 @@ bool ret = false;
                     //can load the images now
                     //copy the image to a map (name , PlayImage) and then start's loading the images
                     tmp.region = cv::Rect(tmp.x,tmp.y,tmp.w,tmp.h);
-                    sequences.emplace(std::make_pair(tmp.name,tmp));                        
+                    animations.emplace(std::make_pair(tmp.name,tmp));                        
                     
                     }
                     ret = true;

@@ -4,24 +4,29 @@
     "window_number":1,
     "step_ms":200,
     "ondemand_max":5,
-    
-    "sequences":[
+    "character":"magistrade",
+    "IP":"192.168.0.105",
+    "PORT":8080,
+    "type":"magistrade",
+    "endpoints":["index","ondemand","json_store"],
+    "animations":[
     {
     "name":"Fundo",
     "type":"permanent",
+    "key":"0",
     "order":"background",
     "repeat":3,
     "pos":{"x":0, "y":0,"w":800, "h":600},
     "names":[
-    "/home/pi/workspace/VideoManager/pictures/sleep_1.png",
-    "/home/pi/workspace/VideoManager/pictures/sleep_2.png",
-    "/home/pi/workspace/VideoManager/pictures/sleep_3.png",
-    "/home/pi/workspace/VideoManager/pictures/sleep_4.png",
-    "/home/pi/workspace/VideoManager/pictures/sleep_5.png"
+    "/home/pi/VideoManager/pictures/sleep_1.png",
+    "/home/pi/VideoManager/pictures/sleep_2.png",
+    "/home/pi/VideoManager/pictures/sleep_3.png",
+    "/home/pi/VideoManager/pictures/sleep_4.png",
+    "/home/pi/VideoManager/pictures/sleep_5.png"
     ],
     "last_one":{
         "has_last":true,
-        "file_name":"/home/pi/workspace/VideoManager/pictures/sleep_over.png"
+        "file_name":"/home/pi/VideoManager/pictures/sleep_over.png"
         }
 
     },
@@ -33,15 +38,15 @@
     "repeat":10,
     "pos":{"x":0, "y":0,"w":800, "h":600},
     "names":[
-    "/home/pi/workspace/VideoManager/pictures/sleep_1.png",
-    "/home/pi/workspace/VideoManager/pictures/sleep_2.png",
-    "/home/pi/workspace/VideoManager/pictures/sleep_3.png",
-    "/home/pi/workspace/VideoManager/pictures/sleep_4.png",
-    "/home/pi/workspace/VideoManager/pictures/sleep_5.png"
+    "/home/pi/VideoManager/pictures/sleep_1.png",
+    "/home/pi/VideoManager/pictures/sleep_2.png",
+    "/home/pi/VideoManager/pictures/sleep_3.png",
+    "/home/pi/VideoManager/pictures/sleep_4.png",
+    "/home/pi/VideoManager/pictures/sleep_5.png"
     ],
     "last_one":{
         "has_last":true,
-        "file_name":"/home/pi/workspace/VideoManager/pictures/sleep_over.png"
+        "file_name":"/home/pi/VideoManager/pictures/sleep_over.png"
         }
     }]
 }
