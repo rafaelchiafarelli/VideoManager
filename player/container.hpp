@@ -130,7 +130,7 @@ public:
             }
         else
         {
-            ret.append("false,\"last_one\":\"\"");
+            ret.append("false,\"file_name\":\"\"");
         }
         ret.append("}}");
         return ret;

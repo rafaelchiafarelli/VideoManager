@@ -2,7 +2,7 @@
 {
     "window":[1080,1920],
     "window_number":1,
-    "step_ms":200,
+    "step_ms":50,
     "ondemand_max":5,
     "character":"magistrade",
     "IP":"192.168.0.105",

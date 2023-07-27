@@ -2,7 +2,7 @@
 {
     "window":[640,480],
     "window_number":1,
-    "step_ms":200,
+    "step_ms":50,
     "ondemand_max":5,
     "character":"messenger",
     "IP":"192.168.1.106",
@@ -36,7 +36,7 @@
     "key":"1",
     "order":"foreground",
     "repeat":10,
-    "pos":{"x":0, "y":0,"w":800, "h":600},
+    "pos":{"x":0, "y":0,"w":640, "h":480},
     "names":[
     "/home/orangepi/VideoManager/pictures/sleep_1.png",
     "/home/orangepi/VideoManager/pictures/sleep_2.png",
