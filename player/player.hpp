@@ -13,8 +13,8 @@ class Player
 private:
 
     void glue(cv::Mat src, cv::Mat dst, cv::Rect region);
- 
-    
+    std::string config_file;
+    void load_config(std::string config_file);
     std::thread work;
     std::atomic_bool alive;
     void transparency(cv::Mat img);
@@ -25,6 +25,12 @@ public:
     container c;
     void Start();
     void Stop();
+    void Restart(){
+        Stop();
+        load_config(config_file);
+        Start();
+    }
+
     std::vector<std::string> OnDemandListName;
     bool OnDemand(std::string name);
     Player(std::string config_file);

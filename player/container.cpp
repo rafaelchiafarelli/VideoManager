@@ -9,6 +9,7 @@ bool ret = false;
 
     */
     std::ifstream f(filename);
+    std::cout<<"parser file:"<<f.good()<<std::endl;
     if(f.good())
     {
         try

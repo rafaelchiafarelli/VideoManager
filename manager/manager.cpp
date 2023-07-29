@@ -51,16 +51,26 @@ int main(int argc, char** argv )
     CROW_ROUTE(app, "/json_store")
         .methods("POST"_method)
     ([&](const crow::request& req){
+        std::cout<<"got here"<<std::endl;
         auto raw = crow::json::load(req.body);
         if (!raw)
             return crow::response(400);
         ofstream file1("./test_player.json");
         file1 << raw << endl;
         file1.close();                
-        alive = false;
+        P.Restart(); 
         return crow::response{"loaded"};
     });
+    CROW_ROUTE(app, "/json_get")
+        .methods("GET"_method)
+    ([&](const crow::request& req){
+        std::cout<<"go get the json"<<std::endl;
+            std::string register_json;
+    register_json.reserve(1000);
+    register_json.append(P.c.tostring());
 
+        return crow::response{register_json};
+    });
     P.Start();
     int count =0;
     app.port(P.c.app.PORT).run();

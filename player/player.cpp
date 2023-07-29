@@ -158,9 +158,14 @@ void Player::work_func(){
         
     }
 }
-Player::Player(std::string config_file)
+Player::Player(std::string external_file)
 {
     alive = false;
+    config_file = external_file;
+    load_config(config_file);
+}
+void Player::load_config(std::string config_file)
+{
     if(c.parser(config_file))
     {
         std::cout<<"configuration loaded -- loading images"<<std::endl;
